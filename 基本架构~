@@ -1,0 +1,15 @@
+
+app:
+	account
+	problemlist
+	problemclassfication
+	contest
+	status
+	ranklist
+	blog
+	discuss
+	userinfo
+	wiki
+	game
+	dashboard
+

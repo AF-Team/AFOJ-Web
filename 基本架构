@@ -1,0 +1,27 @@
+
+app:
+	account
+	problemlist
+	problemclassfication
+	contest
+	status
+	ranklist
+	blog
+	discuss
+	userinfo
+	wiki
+	game
+	dashboard
+变量命名规则
+	统一使用英语
+	不允许使用下划线
+	
+	常量
+		所有字母大写
+		eg: MAX
+	变量
+	除第一个单词的首字母小写，其他单词首字母大写
+	eg:problemList
+	函数名
+	各个单词首字母均大写
+	eg:HandleStatus
