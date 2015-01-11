@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %} 空军航空大学在线判题系统-登陆 {% endblock %}
+
+{% block body %}
+<style>
+.sign{
+  width:330px;
+}
+.center-block {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.register{
+  height: 500px
+}
+body{
+  background-color: #eee
+}
+</style>
+<div class="container">
+  <br>
+   <br>
+   <br>
+  <div class="register">
+  <div class="sign center-block" >
+        <div class="alert  alert-warning">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+  <p>{{info}}</p>
+        </div>
+
+
+    <form class="form-signin" role="form" width="40%" method="post" action="">
+       <input type="hidden" name='next' value="{{next}}">
+        <h2 class="form-signin-heading text-center">请登录</h2>
+        <input type="text" class="form-control" placeholder="用户名" required autofocus name="username">
+        
+        <input type="password" class="form-control" placeholder="密码" required name="password">
+        <br>
+        <br>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">登录</button>
+        </form>
+
+  </div>
+</div>
+
+
+{% endblock %}

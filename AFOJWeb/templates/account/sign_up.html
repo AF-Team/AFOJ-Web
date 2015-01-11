@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %} 空军航空大学在线判题系统-注册 {% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6"> 
+
+        <div class="sign">
+    {% if error %}
+    <div class="alert alert-danger error-info">{{ error }}</div>
+    {% endif %}
+    <form role="form" action="" method="post" id = 'sign_up'>
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="text" name="username" class="form-control input-lg" id="sgin_up_username" placeholder="用户名 " data-toggle="tooltip" data-placement="top" title="请输入20个字符以内" maxlength="20" autofocus="autofocus">
+      </div>
+      <div class="form-group">
+        <input type="text" name="school_ID" class="form-control input-lg" id="sign_up_id" data-toggle="tooltip" data-placement="top" title="请填写正确的学号(9-11位）" placeholder="学号" maxlength="12" >
+      </div>
+      <div class="form-group">
+        <input type="email" name="email" class="form-control input-lg" id="sign_up_email" placeholder="邮箱地址" maxlength="50">
+      </div>
+      <div class="form-group">
+        <input type="password" name="password" class="form-control input-lg" id="sign_up_password" placeholder="密码" maxlength="20">
+      </div>
+      <button type="submit" class="btn btn-success btn-lg btn-block">注册OJ</button>
+    </form>
+</div>
+
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
