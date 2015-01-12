@@ -1,3 +1,4 @@
+#encoding=utf-8
 from django.db import models
 from account.models import *
 from problemlist.models import *
