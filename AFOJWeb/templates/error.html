@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %} 空军航空大学在线判题系统-注册 {% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-6"> 
+    {% if error %}
+    <div class="alert alert-danger error-info">{{ error }}</div>
+    {% endif %}
+</div>
+</div>
+</div>
+{% endblock %}

@@ -8,6 +8,7 @@ class UserOJ(models.Model):
 	team=models.IntegerField(default=1,max_length=2)
 	realName=models.CharField(max_length=12)
 	studentId=models.CharField(max_length=12)
+	portrait=models.ImageField(upload_to="/")
 	scoreOne=models.IntegerField(default=0)
 	scoreTwo=models.IntegerField(default=0)
 	def __unicode__(self):
