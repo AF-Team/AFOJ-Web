@@ -127,7 +127,7 @@ def submit_code(request):
 		except ObjectDoesNotExist:
 			authority=None
 		if cid==None:
-			if probem.visible==False and authority!=config.ADMIN:
+			if problem.visible==False and authority!=config.ADMIN:
 				error="这个题目 NO可用哦"
 				return render_to_response("error.html",RequestContext(request,{"error":error}))
 		if cid!=None:
@@ -156,8 +156,8 @@ def submit_code(request):
 		if cid!=None:
 			problem_obj=Contest_problem.objects.get(contest_id=cid,problem_id=pid)
 			submit_dic={
-			'user':request.user.UserOJ,
-			'probem':problem,
+			'user':request.user.useroj,
+			'problem':problem,
 			'ip':request.META.get('REMOTE_ADDR'),
 			'code_length':len(code),
 			'language':language,
@@ -165,8 +165,8 @@ def submit_code(request):
 			}
 		if cid==None:
 			submit_dic={
-			'user':request.user.UserOJ,
-			'probem':problem,
+			'user':request.user.useroj,
+			'problem':problem,
 			'ip':request.META.get('REMOTE_ADDR'),
 			'code_length':len(code),
 			'language':language,
@@ -178,9 +178,9 @@ def submit_code(request):
 			except ObjectDoesNotExist:
 				error="这个比赛不存在哦"
 				return render_to_response("error.html",RequestContext(request,{"error":error}))
-		solution=solution.objects.create(**submit_dic)
+		solution=Solution.objects.create(**submit_dic)
 		Source_code.objects.create(solution=solution,source=code)
 		if cid==None:
-			HttpResponseRedirect('status/')
+			return HttpResponseRedirect('status/')
 		if cid!=None:
-			HttpResponseRedirect('/')
+			return HttpResponseRedirect('/')
