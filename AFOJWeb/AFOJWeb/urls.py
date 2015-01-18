@@ -21,6 +21,10 @@ urlpatterns+=patterns((''),
 	)
 
 urlpatterns+=patterns((''),
+	(r'^status/',include('status.urls')),
+	)
+
+urlpatterns+=patterns((''),
 	(r'^blog/',include('blog.urls')),
 	)
 

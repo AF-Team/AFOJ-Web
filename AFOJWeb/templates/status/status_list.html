@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{%block css%}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/dashboard.css">
+{%endblock%}
+{%block title%}
+空军航空大学在线判题系统-题目
+{%endblock%}
+{% block body %}
+<div class="bs-docs-header" id="content">
+      <div class="container">
+       <h1>状态</h1>
+
+    <p>你可以在这里看到提交代码的记录
+                </p>
+        
+      </div>
+    </div>
+<div class="container">
+  
+<form class="form-horizontal" role="form" action="" method="post" >
+    <div class="form-group">
+        <label class="col-sm-1 control-label" for="problem_id">Problem</label>
+        <div class="col-sm-1">
+            <input type="text" name="problem_id" class=" form-control">
+        </div>
+        <label class="col-sm-1 control-label" for="user_id">Author</label>
+        <div class="col-sm-1">
+            <input type="text" name="user_id" class="form-control">
+        </div>
+        <div class="col-sm-2">
+        <select class="form-control" name="result">
+          <option value='A'>All</option>
+          <option value="0">Wating</option>
+          <option value="1">Wating Rejudge</option>
+          <option value="2">Compiling</option>
+          <option value="3">Runing and Judge</option>
+          <option value="4">Accepted</option>
+          <option value="5">Presentation Error</option>
+          <option value="6">Wrong Answer</option>
+          <option value="7">Time Limit Exceeded</option>
+          <option value="8">Memory Limit Exceeded</option>
+          <option value="9">Output Limit Exceeded</option>
+          <option value="10">Runtime Exceeded</option>
+          <option value="11">Copile Error</opinton>
+          <option value="12">Compile OK</option>
+          <option value="13">Test Run</option>
+        </select>
+        </div>
+        {{result.value}}
+        <div class="col-sm-2">
+            <select class="form-control" name="lang">
+                <option value="A">All</option>
+                <option value="0">C</option>
+                <option value="1">C++</option>
+                <option value="2">Pascal</option>
+                <option value="3">Java</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>    
+    </div>
+</form>
+
+<table class="table table-striped table-condensed table-hover">
+  <thead><tr>
+    <th>#</th>
+    <th>Problem</th>
+        <th>User</th>
+        <th>Result</th>
+        <th>Memory</th>
+        <th>Time</th>
+        <th>Language</th>
+        <th>CodeLength</th>
+        <th>SubmitTime</th>
+  </tr></thead>
+  <tbody>
+    {%for status in statuses%}
+    <tr align="left">
+        <td class="sid" >{{status.id}}</td>
+        <td><a href="">{{status.problem_id}}</a></td>
+        <td><a href="">{{status.user}}</a></td>
+        <td  class='result' >{{status.result}}</td>
+        <td class='memo'>{{status.memory}}kb</td>
+        <td class='time'>{{status.time}}ms</td>
+        <!-- <td></td> -->
+        <td>
+        {%if user.is_staff%}
+            <a href="/oj/code/{{status.solution_id}}" target="_blank" class='lang'>{{status.language}}</a>
+        {%else%}
+        {% ifequal user.username status.user_id %}
+                <a href="/oj/code/{{status.solution_id}}" target="_blank" class='lang'>{{status.language}}</a>
+        {% else %}
+                <a href="#" class='lang'>{{status.language}}</a>
+        {% endifequal %}
+        {%endif%}
+        </td>
+
+        <td>{{status.code_length}}B</td>
+        <td>{{status.in_date | date:"o-n-j G:i:s"}}</td>
+    
+    </tr>
+    {%endfor%}
+    </tbody>    
+</table>
+</div>
+
+{% endblock %}

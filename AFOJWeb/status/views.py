@@ -31,7 +31,7 @@ def index(request):
 			statuses=status_pages.page(1)
 		except EmptyPage:
 			statuses=status_pages.page(status_pages.num_pages)
-		return render_to_response("status/status_list.html",RequestContext(request,{'status_list':statuses}))
+		return render_to_response("status/status_list.html",RequestContext(request,{'statuses':statuses}))
 
 
 	if request.method=="GET":
@@ -44,7 +44,7 @@ def index(request):
 			statuses=status_pages.page(1)
 		except EmptyPage:
 			statuses=status_pages.page(status_pages.num_pages)
-		return render_to_response("status/status_list.html",RequestContext(request,{'status_list':statuses}))
+		return render_to_response("status/status_list.html",RequestContext(request,{'statuses':statuses}))
 
 def code_show(request):
 	if request.method=="GET":

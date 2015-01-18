@@ -181,6 +181,6 @@ def submit_code(request):
 		solution=Solution.objects.create(**submit_dic)
 		Source_code.objects.create(solution=solution,source=code)
 		if cid==None:
-			return HttpResponseRedirect('status/')
+			return HttpResponseRedirect('/status/')
 		if cid!=None:
 			return HttpResponseRedirect('/')
