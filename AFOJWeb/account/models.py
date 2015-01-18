@@ -13,8 +13,9 @@ class UserOJ(models.Model):
 	scoreTwo=models.IntegerField(default=0)
 	def __unicode__(self):
 		return self.user.username
+
 class Privilege(models.Model):
-    user = models.ForeignKey(UserOJ)
+    user = models.OneToOneField(UserOJ,primary_key=True)
     authority = models.IntegerField()
     defunct = models.BooleanField(default=False)
     

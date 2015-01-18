@@ -8,6 +8,7 @@ from django.shortcuts import render_to_response,RequestContext
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+
 # Create your views here.
 # def login(request):
 #     return render_to_response( "account/login.html",RequestContext(request,{}))
@@ -50,7 +51,8 @@ def sign_up(request):
             error = '这个用户名已经有人使用了 !'
             return render(request, "account/sign_up.html", {'error' : error})
 
-        UserOJ.objects.create(user=user, studentId=studentId)
+        user_oj=UserOJ.objects.create(user=user, studentId=studentId)
+        Privilege.objects.create(user=user_oj,authority=1)
         user=authenticate(username=username,password=password)
         login(request,user)
         # return render_to_response("index.html",RequestContext(request,))
