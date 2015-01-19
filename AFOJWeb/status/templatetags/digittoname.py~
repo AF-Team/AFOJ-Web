@@ -1,0 +1,8 @@
+from django.template import Node
+from django.template import TemplateSyntaxError, Library
+from AFOJWeb.config import VERDICT_NAME
+register = Library()
+@register.filter
+def digittoname(value):
+	return VERDICT_NAME[value][1]
+register.filter('digittoname',digittoname)

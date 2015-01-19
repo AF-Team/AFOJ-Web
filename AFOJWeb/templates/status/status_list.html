@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load digittoname %}
+{% load digittolanguage %}
 {%block css%}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/dashboard.css">
 {%endblock%}
@@ -16,44 +18,43 @@
       </div>
     </div>
 <div class="container">
-  
+
 <form class="form-horizontal" role="form" action="" method="post" >
     <div class="form-group">
         <label class="col-sm-1 control-label" for="problem_id">Problem</label>
         <div class="col-sm-1">
-            <input type="text" name="problem_id" class=" form-control">
+            <input type="text" name="pid" class=" form-control">
         </div>
-        <label class="col-sm-1 control-label" for="user_id">Author</label>
+        <label class="col-sm-1 control-label" for="username">Author</label>
         <div class="col-sm-1">
-            <input type="text" name="user_id" class="form-control">
+            <input type="text" name="username" class="form-control">
         </div>
         <div class="col-sm-2">
+
         <select class="form-control" name="result">
-          <option value='A'>All</option>
-          <option value="0">Wating</option>
-          <option value="1">Wating Rejudge</option>
-          <option value="2">Compiling</option>
-          <option value="3">Runing and Judge</option>
-          <option value="4">Accepted</option>
-          <option value="5">Presentation Error</option>
-          <option value="6">Wrong Answer</option>
-          <option value="7">Time Limit Exceeded</option>
-          <option value="8">Memory Limit Exceeded</option>
-          <option value="9">Output Limit Exceeded</option>
-          <option value="10">Runtime Exceeded</option>
-          <option value="11">Copile Error</opinton>
-          <option value="12">Compile OK</option>
-          <option value="13">Test Run</option>
+          <option value='A'>各种状态</option>
+          <!-- <option value="0">各种状态</option> -->
+          <option value="1">队列中 </option>
+          <option value="2">编译</option>
+          <option value="3">编译错误</option>
+          <option value="4">运行中</option>
+          <option value="5">正确 </option>
+          <option value="6">错误 </option>
+          <option value="7">运行错误</option>
+          <option value="8">时间超限</option>
+          <option value="9">内存超限</option>
+          <option value="10">格式错误</option>
+          <option value="11">输出超限</opinton>
+
         </select>
         </div>
         {{result.value}}
         <div class="col-sm-2">
             <select class="form-control" name="lang">
-                <option value="A">All</option>
+                <option value="A">所有语言</option>
                 <option value="0">C</option>
                 <option value="1">C++</option>
-                <option value="2">Pascal</option>
-                <option value="3">Java</option>
+                <option value="2">Java</option>
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Search</button>    
@@ -78,18 +79,18 @@
         <td class="sid" >{{status.id}}</td>
         <td><a href="">{{status.problem_id}}</a></td>
         <td><a href="">{{status.user}}</a></td>
-        <td  class='result' >{{status.result}}</td>
+        <td  class='result' >{{status.result|digittoname}}</td>
         <td class='memo'>{{status.memory}}kb</td>
         <td class='time'>{{status.time}}ms</td>
         <!-- <td></td> -->
         <td>
         {%if user.is_staff%}
-            <a href="/oj/code/{{status.solution_id}}" target="_blank" class='lang'>{{status.language}}</a>
+            <a href="/oj/code/{{status.solution_id}}" target="_blank" class='lang'>{{status.language|digittolanguage}}</a>
         {%else%}
         {% ifequal user.username status.user_id %}
-                <a href="/oj/code/{{status.solution_id}}" target="_blank" class='lang'>{{status.language}}</a>
+                <a href="/oj/code/{{status.solution_id}}" target="_blank" class='lang'>{{status.language|digittolanguage}}</a>
         {% else %}
-                <a href="#" class='lang'>{{status.language}}</a>
+                <a href="#" class='lang'>{{status.language|digittolanguage}}</a>
         {% endifequal %}
         {%endif%}
         </td>
@@ -101,6 +102,20 @@
     {%endfor%}
     </tbody>    
 </table>
+<ul class="pager">
+    {%if statuses.has_previous%}
+    <li><a href="?page={{statuses.previous_page_number}}">Previous</a></li>
+    {%else%}
+    <li class="disabled"><a href="#">Previous</a></li>
+    {%endif%}
+    {%if statuses.has_next%}
+
+    <li><a href="?page={{statuses.next_page_number}}">Next</a></li>
+    {%else%}
+    <li class="disabled"><a href="#">Next</a></li>
+    {%endif%}
+    <li><a href="?page=1">Top</a></li>
+</ul>
 </div>
 
 {% endblock %}

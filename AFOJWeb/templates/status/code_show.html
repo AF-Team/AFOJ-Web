@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load digittoname %}
+{%block css%}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/dashboard.css">
+<link rel="stylesheet" href="{{STATIC_URL}}css/github.css">
+
+{%endblock%}
+{%block script%}
+<script src="{{STATIC_URL}}js/highlight.pack.js"></script>
+{%endblock%}
+{%block title%}
+空军航空大学在线判题系统-
+{%endblock%}
+{% block body %}
+
+<div class="bs-docs-header" id="content">
+      <div class="container">
+       <h1>{{solution.problem.problem_id}}-{{solution.problem.title}}</h1>
+       <h2>{{solution.id}}-{{solution.user}}</h2>
+    <p><span> 时间使用: <span class="font-color">{{solution.time}}</span> ms</span>
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                <span>内存使用: <span class="font-color">{{solution.memory}} </span>KB</span></p>
+                <p>
+                  <span>结果: <span class="font-color">{{solution.result|digittoname|safe}}</span></span>
+                </p>
+      </div>
+    </div>
+    <div class="code">
+      <div class="container">
+        <pre>
+          <code>
+            
+        {{source_code.source}}
+          </code>
+        </pre>
+      </div>
+    </div>
+    <script>hljs.initHighlightingOnLoad();</script>
+{% endblock %}

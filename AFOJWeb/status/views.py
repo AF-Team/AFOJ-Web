@@ -15,13 +15,14 @@ def index(request):
 		lang=request.POST.get('lang',None)
 		result=request.POST.get('result',None)
 		status_list=Solution.objects.all()
+		print username
 		if pid:
 			status_list=status_list.filter(problem=pid)
 		if username:
-			status_list=status_list.filter(user=username)
-		if lang:
+			status_list=status_list.filter(user__user__username=username)
+		if lang!='A':
 			status_list=status_list.filter(language=lang)
-		if result:
+		if result!='A':
 			status_list=status_list.filter(result=result)
 		status_pages=Paginator(status_list.order_by('-id'),20)
 		page=request.GET.get('page')
@@ -68,12 +69,14 @@ def code_show(request):
 
 
 		username=request.user.username
+		show_flag=False
 		try:
 			user_authority=Privilege.objects.get(user__user__username=username).authority
 			if user_authority==config.ADMIN:
 				show_flag=True
 		except ObjectDoesNotExist:
 			show_flag=False
-		if sol.user__user__username==username:
+		# print sol.user
+		if sol.user==username:
 			show_flag=True
 	return render_to_response("status/code_show.html",RequestContext(request,{'solution':sol,'source_code':source_code,'compile_error':compile_error,'show_flag':show_flag}))
