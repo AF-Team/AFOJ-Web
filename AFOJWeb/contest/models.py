@@ -3,7 +3,7 @@ from django.db import models
 from account.models import *
 from problemlist.models import *
 # Create your models here.
-
+from django.utils import timezone
 class Contest(models.Model):
     title = models.CharField(max_length=255, null=True)
     start_time = models.DateTimeField(null=True)

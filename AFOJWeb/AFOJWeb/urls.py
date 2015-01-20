@@ -17,7 +17,7 @@ urlpatterns+=patterns((''),
 	)
 
 urlpatterns+=patterns((''),
-	(r'^contest/',include('status.urls')),
+	(r'^contest/',include('contest.urls')),
 	)
 
 urlpatterns+=patterns((''),

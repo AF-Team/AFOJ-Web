@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from account.models import *
 from problemlist.models import *
+from contest.models import *
 from AFOJWeb import config
 # Create your views here.
 def index(request):
@@ -44,6 +45,8 @@ def dashboard_problem(request):
 		problems=problem_pages.page(problem_pages.num_pages)
 	return render_to_response("dashboard/dashboard_problem.html",RequestContext(request,{'problems':problems}))
 
+
+
 def dashboard_add_problem(request):
 	if request.method=="GET":	
 		return render_to_response("dashboard/dashboard_add_problem.html",RequestContext(request,))
@@ -77,3 +80,36 @@ def dashboard_add_problem(request):
 		pro.memory_limit=65536
 		pro.save()
 		return HttpResponseRedirect("/problemlist")
+
+
+def dashboard_contest(request):
+	if request.method=='GET':
+		username=request.user.username
+		try:
+			user_authority=Privilege.objects.get(user__user__username=username).authority
+			if user_authority==config.ADMIN:
+				contest_list=Contest.objects.all()
+			else:
+				contest_list=Contest.objects.filter(visible=True)
+		except ObjectDoesNotExist:
+			contest_list=Contest.objects.all()# Pagitor
+	cid=request.GET.get('cid',None)
+	if cid:
+		try:
+			con=Contest.objects.get(id=cid)
+			con.visible= not con.visible
+			con.save()
+			HttpResponseRedirect('/dashboard/contest')
+		except ObjectDoesNotExist:
+			error="比赛不存在"
+			return render_to_response("error.html",RequestContext(request,{'error':error}))
+	contest_pages=Paginator(contest_list,10)
+	contests=[]
+	page=request.GET.get('page')
+	try:
+		contests=contest_pages.page(page)
+	except PageNotAnInteger:
+		contests=contest_pages.page(1)
+	except EmptyPage:
+		contests=contest_pages.page(contest_pages.num_pages)
+	return render_to_response("dashboard/dashboard_contest.html",RequestContext(request,{'contests':contests}))
