@@ -63,15 +63,16 @@
 
 <table class="table table-striped table-condensed table-hover">
   <thead><tr>
-    <th>#</th>
-    <th>Problem</th>
-        <th>User</th>
-        <th>Result</th>
-        <th>Memory</th>
-        <th>Time</th>
-        <th>Language</th>
-        <th>CodeLength</th>
-        <th>SubmitTime</th>
+    <th>运行编号</th>
+
+    <th>题目编号</th>
+        <th>用户</th>
+        <th>结果</th>
+        <th>内存使用</th>
+        <th>时间使用</th>
+        <th>语言</th>
+        <th>代码长度</th>
+        <th>提交时间</th>
   </tr></thead>
   <tbody>
     {%for status in statuses%}
@@ -79,7 +80,7 @@
         <td class="sid" >{{status.id}}</td>
         <td><a href="">{{status.problem_id}}</a></td>
         <td><a href="">{{status.user}}</a></td>
-        <td  class='result' >{{status.result|digittoname}}</td>
+        <td  class='result' >{{status.result|digittoname|safe}}</td>
         <td class='memo'>{{status.memory}}kb</td>
         <td class='time'>{{status.time}}ms</td>
         <!-- <td></td> -->
@@ -104,17 +105,17 @@
 </table>
 <ul class="pager">
     {%if statuses.has_previous%}
-    <li><a href="?page={{statuses.previous_page_number}}">Previous</a></li>
+    <li><a href="?page={{statuses.previous_page_number}}">上一页</a></li>
     {%else%}
-    <li class="disabled"><a href="#">Previous</a></li>
+    <li class="disabled"><a href="#">上一页</a></li>
     {%endif%}
     {%if statuses.has_next%}
 
-    <li><a href="?page={{statuses.next_page_number}}">Next</a></li>
+    <li><a href="?page={{statuses.next_page_number}}">下一页</a></li>
     {%else%}
-    <li class="disabled"><a href="#">Next</a></li>
+    <li class="disabled"><a href="#">下一页</a></li>
     {%endif%}
-    <li><a href="?page=1">Top</a></li>
+    <li><a href="?page=1">第一页</a></li>
 </ul>
 </div>
 
