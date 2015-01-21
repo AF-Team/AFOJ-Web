@@ -5,25 +5,34 @@
 空军航空大学在线判题系统-比赛
 {%endblock%}
 {% block body %}
+<div class="bs-docs-header" id="content">
+      <div class="container">
+       <h1>比赛</h1>
 
+
+    <p>你可以在这看到各个比赛
+                </p>
+        
+      </div>
+    </div>
 <div class="container">
     <hr>
   <nav>
       <ul class="pagination">
-          {%if problems.has_previous%}
-          <li><a href="?page={{problems.previous_page_number}}">&laquo;</a></li>
+          {%if contests.has_previous%}
+          <li><a href="?page={{contests.previous_page_number}}">&laquo;</a></li>
           {%else%}
           <li class="disabled"><a href="#">&laquo;</a></li>
           {%endif%}
-          {%for item in problems.paginator.page_range%}
-              {%ifequal problems.number item%}
+          {%for item in contests.paginator.page_range%}
+              {%ifequal contests.number item%}
               <li class="active"><a href="?page={{item}}">{{item}}</a></li>
               {%else%}
               <li><a href="?page={{item}}">{{item}}</a></li>
               {%endifequal%}
           {%endfor%}
-          {%if problems.has_next%}
-          <li><a href="?page={{problems.next_page_number}}">&raquo;</a></li>
+          {%if contests.has_next%}
+          <li><a href="?page={{contests.next_page_number}}">&raquo;</a></li>
           {%else%}
           <li class="disabled"><a href="#">&raquo;</a></li>
           {%endif%}
@@ -37,16 +46,31 @@
             <th>创建者</th>
             <th>开始时间</th>
             <th>结束时间</th>
+
+            <th>状态</th>
         </tr>
     </thead>
     <tbody>
         {% for item in contests.object_list %}
         <tr >
             <td >{{item.id}}</td>
-            <td><a href="">{{item.title}}</a></td>
+            <td><a href="/contest/contest?cid={{item.id}}">{{item.title}}</a></td>
             <td>{{item.user}}</td>
             <td>{{item.start_time| date:"o-n-j G:i:s"}}</td>
             <td>{{item.end_time| date:"o-n-j G:i:s"}}</td>
+            <td>
+              {%ifequal item.status 0%}
+              计划中
+              {%endifequal%}
+
+              {%ifequal item.status 1%}
+              正在运行
+              {%endifequal%}
+
+            {%ifequal item.status 2%}
+            过期
+              {%endifequal%}
+            </td>
         </tr>
         {% endfor %}
         

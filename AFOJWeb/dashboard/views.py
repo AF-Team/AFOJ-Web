@@ -113,3 +113,53 @@ def dashboard_contest(request):
 	except EmptyPage:
 		contests=contest_pages.page(contest_pages.num_pages)
 	return render_to_response("dashboard/dashboard_contest.html",RequestContext(request,{'contests':contests}))
+
+
+def dashboard_add_contest(request):
+	if request.method=="GET":
+		return render_to_response("dashboard/dashboard_add_contest.html",RequestContext(request,))
+	if request.method=="POST":
+		title=request.POST.get('title',None)
+		description=request.POST.get('description',None)
+		problems=request.POST.get('problems',None)
+		start_time=request.POST.get('start_time',None)
+		end_time=request.POST.get('end_time',None)
+		private=request.POST.get('private',None)
+		username=request.user.username
+		# print request.user
+		if title==None:
+			error="这提交的东西也太少了吧"
+			return render_to_response("error.html",RequestContext(request,{"error":error}))
+		con=Contest()
+		con.title=title
+		con.start_time=start_time
+		con.end_time=end_time
+		con.description=description
+		try:
+			contest_user_add=UserOJ.objects.get(user__username=username)
+			con.user=contest_user_add
+			# print contest_user_add
+		except ObjectDoesNotExist:
+			error="账户信息有问题"
+			return render_to_response("error.html",RequestContext(request,{"error":error}))
+		
+		con_pro=Contest_problem()
+		problems=problems.split(',')
+		con.save()
+		i=0
+		for item in problems:
+			try:
+				pro=Problem.objects.get(problem_id=item)
+			except ObjectDoesNotExist:
+				error="这个题目不存在"
+				return render_to_response("error.html",RequestContext(request,{"error":error}))	
+			con_pro=Contest_problem()
+			con_pro.problem=pro
+			con_pro.contest=con
+			con.num=i
+			i=i+1
+			con_pro.save()
+		return HttpResponseRedirect('/dashboard/contest')
+		# con.user=request.user.username
+		# print con.user
+		# print title,description,problems,start_time,end_time,private

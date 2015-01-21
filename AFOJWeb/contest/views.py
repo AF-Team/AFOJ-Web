@@ -3,6 +3,7 @@
 import re
 from django.db import IntegrityError
 from django.contrib.auth.models import User
+from datetime import *
 
 from django.shortcuts import render_to_response,RequestContext
 from django.contrib.auth import authenticate,login,logout
@@ -30,16 +31,16 @@ def contest_list(request):
 			else:
 				contests=Contest.objects.filter(Q(visible=True) | (Q(user__user__username=username) & Q(visible=False)))
 		except ObjectDoesNotExist:
-			contests=Contest.filter(Q(visible=True) | (Q(user__user__username=username) & Q(visible=False)))
+			contests=Contest.objects.filter(Q(visible=True) | (Q(user__user__username=username) & Q(visible=False)))
 		for contest in contests:
-			if(contest.start_or_not() and contest.end_or_not) or (contest.start_or_not==False):
-				if contest.defunct:
-					contest.defunct=False
-					contest.save()
-			else:
-				if not contest.defunct:
-					contest.defunct=True
-					contest.save()
+			if (contest.start_or_not() and contest.end_or_not):
+				contest.status=1
+			if contest.start_or_not==False:
+				contest.status=0
+			if contest.end_or_not==False:
+				contest.status=2
+			contest.save()
+		print datetime.now()
 		contest_pages=Paginator(contests,10)
 		page=request.GET.get('page')
 		try:
@@ -50,78 +51,57 @@ def contest_list(request):
 			contest_e_page=contest_pages.page(contest_pages.num_pages)
 		return render_to_response("contest/contest_list.html",RequestContext(request,{'contests':contest_e_page}))		
 
-# def contest_problem_list(request):
-# 	if request.method=='GET':
-# 		cid=request.GET.get('cid',None)
-# 		if cid!=None:
-# 			try:
-# 				contest=Contest.objects.get(id=cid)
-# 				now=time.time()
-# 			               t1 = contest.start_time.replace(tzinfo=None) + datetime.timedelta(hours=8)
-# 			               t2 = contest.end_time.replace(tzinfo=None) + datetime.timedelta(hours=8)
-# 		                  	start_time = float(time.mktime(time.strptime(str(t1),'%Y-%m-%d %H:%M:%S'))) - now#已经开始的时间
-#                 			end_time = float(time.mktime(time.strptime(str(t2),'%Y-%m-%d %H:%M:%S'))) - now#剩余的时间
-#                 			problems=Contest_problem.objects.filter(contest__id=cid).order_by('num')
-#                 			username=request.user.username
-#                 			hours = int(start_time / (60 * 60))
-# 			               minutes = int((start_time - (hours * 60 * 60)) / 60)
-# 			               seconds = int(start_time - (hours * 60 * 60) - (minutes * 60))
-# 			               ADMIN=False
-# 			               try:
-# 			               	user_authority=Privilege.objects.get(user__user__username=username).authority
-# 			               	if user_authority==config.ADMIN:
-# 			               		ADMIN=True
-# 			               	if user_authority==config.ADMIN or contest.user.user.username==username:
-# 			               		start_time=0
-# 			               	else:#不是管理员也不是比赛创建者
-# 			               		if contest.private==1:#是否为私有比赛
-# 			               			if contest.visible==False:
-# 			               				error="你没有权限查看这次比赛"
-# 			               				return render_to_response("error.html",RequestContext(request,{'error':error}))
-# 			               			else:#
-# 			               				try:
-# 			               					ContestPrivilege.objects.get(user__user__username=username,contest_id=contest.id)
-# 			               				except ObjectDoesNotExist:
-# 			               					error="你没有权限查看这次比赛"
-# 			               					return render_to_response("error.html",RequestContext(request,{'error':error}))
+def contest_problem_list(request):
+	if request.method=='GET':
+		cid=request.GET.get('cid',None)
+		now=datetime.now()
+		if cid!=None:
+			try:
+				contest=Contest.objects.get(id=cid)
+				problems=Contest_problem.objects.filter(contest__id=cid).values_list('problem',flat=True).order_by('num')
+				username=request.user.username
+				problem_list=Problem.objects.filter(problem_id=problems)
+				# for item in problems:
+				# for item in problem_list:
+				# 	print item.title
+				# 	print item.problem__id
+				# print type(contest.start_time)
+				# print contest.end_time
+				try:
+					user_authority=Privilege.objects.get(user__user__username=username).authority
+					if user_authority==config.ADMIN:
+						return render_to_response("contest/contest_detail.html",RequestContext(request,{'contest':contest,'problems':problem_list,'now':now}))
+					else:
+						error="你没有权限查看这次比赛"
+               					return render_to_response("error.html",RequestContext(request,{'error':error}))
 
-# 			               		else:
-# 			               			if contest.visible==False and user_authority!=config.ADMIN and contest.user.user.username!=username:					
-# 			               				error="你没有权限查看这次比赛"
-# 			               				return render_to_response("error.html",RequestContext(request,{'error':error}))
-# 			               except ObjectDoesNotExist:#如果用户不属于任何一种管理员
-# 				               if contest.user.user.user_name==user_name:
-# 				               	start_time=0
-# 				               else:
-# 				               	if contest.private==1:	
-# 				               		if contest.visible==False:
-# 				               			error="你没有权限查看这次比赛"
-# 			               				return render_to_response("error.html",RequestContext(request,{'error':error}))
-# 			               			else:
-# 			               				try:
-# 			               					ContestPrivilege.objects.get(user__user__username=username,contest_id=contest.id)
-# 			               				except ObjectDoesNotExist:
-# 			               					error="你没有权限查看这次比赛"
-# 			               					return render_to_response("error.html",RequestContext(request,{'error':error}))
-# 			               		else:
-# 			               			if contest.visible==False and user_authority!=config.ADMIN and contest.user.user.username!=username:					
-# 			               				error="你没有权限查看这次比赛"
-# 			               				return render_to_response("error.html",RequestContext(request,{'error':error}))
-# 			               contest_user=False:		
-# 			               if username==contest.user.user.username:
-# 			               	contest_user=True
-# 			               accepted=[]
-# 			               unsolved=[]
-# 			               if request.user.is_authenticated():
-# 			               	solution_list=Solution.objects.filter(user_id=request.user.id, contest_id=cid)
-# 			               	accepted=solution_list.filter(result=5).order_by('problem').values_list('problem', flat=True).distinct()
-# 			               	unsolved = solution_list.exclude(result=4).order_by('problem').values_list('problem', flat=True).distinct()
-# 			               	problem_dict = {'problems': problems, 'contest': contest, 'start_time': int(start_time),'ADMIN': ADMIN, 'contest_user': contest_user, 'cid': cid, 'hours': hours, 'minutes': minutes, 'seconds': seconds, 'flag': contest.end_or_not(), 'contest_title': contest.title, 'accepted': accepted, 'unsolved': unsolved}
+				except ObjectDoesNotExist:
+					if contest.user.user.username==username:
+						return render_to_response("contest/contest_detail.html",RequestContext(request,{'contest':contest,'problems':problem_list,'now':now}))
+					if contest.user.user.username!=username:
+						if contest.private==1:
+							if contest.visible==False:
+								error="你没有权限查看这次比赛"
+			               				return render_to_response("error.html",RequestContext(request,{'error':error}))
+			               			if contest.visible==True:
+			               				try:
+			               					ContestPrivilege.objects.get(user__user__username=username,contest_id=cid)
+									return render_to_response("contest/contest_detail.html",RequestContext(request,{'contest':contest,'problems':problem_list,'now':now}))
+								except ObjectDoesNotExist:
+									error="你没有被邀请这次比赛"
+			               					return render_to_response("error.html",RequestContext(request,{'error':error}))
+ 						if contest.private!=1:
+ 							# print 'test'
+ 							if contest.visible==False:
+ 								rror="你没有权限查看这次比赛"
+			               				return render_to_response("error.html",RequestContext(request,{'error':error}))
+			               			if contest.visible==True:
+								return render_to_response("contest/contest_detail.html",RequestContext(request,{'contest':contest,'problems':problem_list,'now':now}))
 
-# 			               return render_to_response("contest/contest_problem_list.html",RequestContext(request,{'problem_dict':problem_dict}))
-# 			except ObjectDoesNotExist:
-# 				error="比赛不存在"
-#            				return render_to_response("error.html",RequestContext(request,{'error':error}))
+			except ObjectDoesNotExist:
+				error="比赛不存在"
+				return render_to_response("error.html",RequestContext(request,{'error':error}))
+
 
 # def contest_rank(request):
 # 	if request.method=='GET':

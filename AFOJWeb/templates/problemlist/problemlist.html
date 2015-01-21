@@ -6,7 +6,16 @@
 空军航空大学在线判题系统-题目
 {%endblock%}
 {% block body %}
+<div class="bs-docs-header" id="content">
+      <div class="container">
+       <h1>题目</h1>
 
+
+    <p>你可以在这看到各个题目,进行练习 等等
+                </p>
+        
+      </div>
+    </div>
 <div class="container">
     <hr>
   <nav>
@@ -43,7 +52,7 @@
         {% for item in problems.object_list %}
         <tr >
             <td >{{item.problem_id}}</td>
-            <td><a href="">{{item.title}}</a></td>
+            <td><a href="/problemlist/problem/{{item.problem_id}}">{{item.title}}</a></td>
             <td>{{item.difficulty}}</td>
             <td>{{item.solved}}/{{item.submit}}</td>
         </tr>
