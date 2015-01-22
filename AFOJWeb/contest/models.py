@@ -22,10 +22,13 @@ class Contest(models.Model):
     user = models.ForeignKey(UserOJ)
     
     def start_or_not(self):
-     
+
         return self.start_time <= timezone.now()
 
     def end_or_not(self):
+        # print str(self.end_time)+'  '+str(timezone.now())
+        print self.end_time
+        # print  self.end_time > timezone.now()
         return self.end_time > timezone.now()
 
     def __unicode__(self):
@@ -38,7 +41,7 @@ class Contest_problem(models.Model):
     problem = models.ForeignKey(Problem)
     contest = models.ForeignKey(Contest)
     title = models.CharField(max_length=200, default='')
-    num = models.IntegerField(default=0)
+    num = models.IntegerField()
     sorce = models.IntegerField(default=10)
     
     def __unicode__(self):

@@ -128,7 +128,7 @@ def submit_code(request):
 			authority=None
 		if cid==None:
 			if problem.visible==False and authority!=config.ADMIN:
-				error="这个题目 NO可用哦"
+				error="这个题目不可用哦"
 				return render_to_response("error.html",RequestContext(request,{"error":error}))
 		if cid!=None:
 			try:
@@ -174,7 +174,7 @@ def submit_code(request):
 		if cid !=None:
 			try:
 				contest=Contest.objects.get(id=cid)
-				submit['contest']=contest
+				submit_dic['contest']=contest
 			except ObjectDoesNotExist:
 				error="这个比赛不存在哦"
 				return render_to_response("error.html",RequestContext(request,{"error":error}))
@@ -183,4 +183,4 @@ def submit_code(request):
 		if cid==None:
 			return HttpResponseRedirect('/status/')
 		if cid!=None:
-			return HttpResponseRedirect('/')
+			return HttpResponseRedirect('/status/')

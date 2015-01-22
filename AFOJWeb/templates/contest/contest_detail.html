@@ -3,8 +3,8 @@
 {%endblock%}
 {%block title%}
 空军航空大学在线判题系统-比赛
-{%endblock%}
-
+{%endblock%} 
+{%load digittoalpha %}
 {% block body %}
 <div class="bs-docs-header" id="content">
       <div class="container">
@@ -68,19 +68,52 @@
           <tbody>
             {%for item in problems%}
             <tr>
-              <td>Problem A</td>
-              <td><a href="/problemlist/problem/{{item.problem_id}}">{{item.title}}</a></td>
-              <td>Null</td>
+              <td>{{item.num|digittoalpha}}</td>
+              <td><a href="/problemlist/problem/{{item.problem_id}}?cid={{contest.id}}">{{item.problem.title}}</a></td>
+              <td>{{item.ac}}/{{item.submit}}</td>
             </tr>
             {%endfor%}
           </tbody>
         </table>
   </div>
 <div  role="tabpanel" class="tab-pane fade " id="rank" aria-labeledBy="rank-tab">
-  <p>
-    Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
 
-  </p>
+
+    <table class="table table-striped table-condensed table-hover">
+      <th>#</th>
+      <th>用户</th>
+      <th>解题数</th>
+      <th>总时间</th>
+      {%for item in problems%}
+          <th>{{item.num|digittoalpha}}</th>
+      {%endfor%}
+      <tbody>
+        {%for item in contest_rank_info%}
+        <tr>
+          <td>{{forloop.counter}}</td>
+          <td>
+        {{item.0}}
+          </td>
+          <td>{{item.1}}</td>
+          <td>{{item.2}}</td>
+          {%for pro_time in item.3%}
+            {%if pro_time.submit%}
+              {%if pro_time.ac_time %}
+                {%if pro_time.unsolved%}
+                <td>{{pro_time.ac_time}}(-{{pro_time.unsolved}})</td>
+                {%else%}
+                 <td>{{pro_time.ac_time}}</td>
+                {%endif%}
+                
+                {%endif%}
+                {%else%}
+                <td></td>
+                {%endif%}
+          {%endfor%}
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
 </div>
 </div>
 <script>

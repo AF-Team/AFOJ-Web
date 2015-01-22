@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{%block title%}
+空军航空大学在线判题系统
+{%endblock%}
+{%block css%}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/dashboard.css">
+{%endblock%}
+{% block body %}
+<style>
+  .red{
+    color: red;
+  }
+  .green{
+    color: green;
+  }
+</style>
+</style>
+  <div class="bs-docs-header" id="content">
+      <div class="container">
+        <h1>后台</h1>
+        <p>这里可以进行题目 测试 以及用户的管理,可以发布新闻信息，等等。</p>
+        
+      </div>
+    </div>
+  <div class="dashboard">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
+          <ul class="nav">
+         {%include 'dashboard/sidebar.html'%}
+          </ul>
+          </div>
+        </div>
+        <div class="col-md-9">
+           <h2>上传题目</h2>
+              <form action="" method="post" enctype="multipart/form-data">
+                  
+              <input type="file" name="file">
+              <input type="submit">
+              </form>
+  
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

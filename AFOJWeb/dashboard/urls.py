@@ -5,4 +5,5 @@ urlpatterns=patterns('dashboard.views',
 	url(r'^addproblem$','dashboard_add_problem'),
 	url(r'^contest$','dashboard_contest'),
 	url(r'^addcontest$','dashboard_add_contest'),
+	url(r'^fps$','fps_upload'),
 	)

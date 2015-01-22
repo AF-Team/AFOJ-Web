@@ -27,3 +27,19 @@ LANGUAGE=(
 	(2,'Java'),
 	)
 
+CONTEST_ALPHA=(
+	(0,'Problem A'),
+	(1,'Problem B'),
+	(2,'Problem C'),
+	(3,'Problem D'),
+	(4,'Problem E'),
+	(5,'Problem F'),
+	(6,'Problem G'),
+	(7,'Problem H'),
+	(8,'Problem I'),
+	(9,'Problem J'),
+	(10,'Problem K'),
+	(11,'Problem L'),
+	(12,'Problem M'),
+	(13,'Problem N'),
+	)

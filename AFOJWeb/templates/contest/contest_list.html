@@ -60,15 +60,19 @@
             <td>{{item.end_time| date:"o-n-j G:i:s"}}</td>
             <td>
               {%ifequal item.status 0%}
-              计划中
+                            <span class="label label-success" id="status">计划中</span>
+
+              
               {%endifequal%}
 
               {%ifequal item.status 1%}
-              正在运行
+              <span class="label label-primary" id="status">正在运行</span>
               {%endifequal%}
 
             {%ifequal item.status 2%}
-            过期
+                       <span class="label label-default" id="status">过期</span>
+
+            
               {%endifequal%}
             </td>
         </tr>
