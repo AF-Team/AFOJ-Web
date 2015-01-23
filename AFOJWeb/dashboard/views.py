@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from xml.etree.ElementTree import *
 from xml.etree.ElementTree import fromstring as fs
+from base64 import *
 import os
 from datetime import datetime
 from account.models import *
@@ -193,11 +194,13 @@ def handle_fps(fpsxml,request):
 	list=root.getiterator('item')
 	# print list
 	for item in list:
+		
+
 		time_limit=item.find('time_limit')
 		title=item.find('title')
 		# print title
 		memory_limit=item.find('memory_limit')
-		description=item.find('description')
+		description=item.find('description').text
 		pro_input=item.find('input')
 		pro_output=item.find('output')
 		sample_input=item.find('sample_input')
@@ -207,17 +210,37 @@ def handle_fps(fpsxml,request):
 		sol=item.find('solution')
 		test_input=item.find('test_input')
 		test_output=item.find('test_output')
-		img=item.find('base64')
-		src=item.find('src')
-		print img,src
+
+		
 		pro=Problem()
 		try:
 			pid=Problem.objects.order_by('-problem_id')[0].problem_id+1
 		except:
 			pid=1000
+		img_id=1
+		for x in item:
+			if x.tag=='img':
+				src=x.find('src').text
+				hz=os.path.splitext(src)
+				base64=b64decode(x.find('base64').text)
+				imgpath=os.path.join('static/upload/img',str(pid))
+				if not os.path.exists(imgpath):
+					os.mkdir(imgpath)
+				imgname=str(pid)+'_'+str(img_id)+hz[1]
+				imgpath=os.path.join(imgpath,imgname)
+				fp=open(imgpath,'w')
+				fp.write(base64)
+				fp.close()
+				imgpath='/'+imgpath
+				description=description.replace(src,imgpath)
+				img_id+=1
+
+
+
+
 		pro.problem_id=pid
 		pro.title=title.text
-		pro.description=description.text
+		pro.description=description
 		pro.time_limit=time_limit.text
 		pro.memory_limit=memory_limit.text
 		pro.pro_input=pro_input.text
