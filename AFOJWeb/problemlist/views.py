@@ -3,6 +3,7 @@
 import re
 from django.db import IntegrityError
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from django.shortcuts import render_to_response,RequestContext
 from django.contrib.auth import authenticate,login,logout
@@ -136,7 +137,10 @@ def submit_code(request):
 			except ObjectDoesNotExist:
 				error="这个比赛不存在哦"
 				return render_to_response("error.html",RequestContext(request,{"error":error}))
-			if contest.start_or_not ==False or contest.end_or_not ==False:
+			flag_one=contest.start_time<=timezone.now()
+			flag_two=contest.end_time>timezone.now()
+			if flag_one ==False or flag_two ==False:
+
 				if not(authority==config.ADMIN or contest.user.user.username==username):
 					error="这个比赛还没开始 或者已经结束了"
 					return render_to_response("error.html",RequestContext(request,{"error":error}))
@@ -183,4 +187,4 @@ def submit_code(request):
 		if cid==None:
 			return HttpResponseRedirect('/status/')
 		if cid!=None:
-			return HttpResponseRedirect('/status/')
+			return HttpResponseRedirect('/status/contest?cid='+cid)

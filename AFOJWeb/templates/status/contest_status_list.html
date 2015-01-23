@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load digittoname %}
-{% load digittolanguage %}
+{% load digittoalpha %}
+{%load digittoname%}
 {%block css%}
 <link rel="stylesheet" href="{{ STATIC_URL }}css/dashboard.css">
 {%endblock%}
@@ -11,8 +12,8 @@
 <div class="bs-docs-header" id="content">
       <div class="container">
        <h1>状态</h1>
-      <h2>{{contest.title}}</h2>
-    <p>你可以在这里看到提交代码的记录
+      <h2></h2>
+    <p>你可以在这里看到[{{contest.title}}]提交代码的记录
                 </p>
         
       </div>
@@ -21,9 +22,13 @@
 
 <form class="form-horizontal" role="form" action="" method="post" >
     <div class="form-group">
-        <label class="col-sm-1 control-label" for="problem_id">Problem</label>
-        <div class="col-sm-1">
-            <input type="text" name="pid" class=" form-control">
+        <div class="col-sm-2">
+          <select name="pid"  class="form-control">
+            <option value='A'>所有题目</option>
+            {%for item in con_problems%}
+            <option value="{{item.num}}">{{item.num|digittoalpha}}</option>
+            {%endfor%}
+          </select>
         </div>
         <label class="col-sm-1 control-label" for="username">Author</label>
         <div class="col-sm-1">
@@ -78,7 +83,7 @@
     {%for status in statuses%}
     <tr align="left">
         <td class="sid" >{{status.id}}</td>
-        <td><a href="">{{status.problem_id}}</a></td>
+        <td><a href="">{{status.num|digittoalpha}}</a></td>
         <td><a href="">{{status.user}}</a></td>
         <td  class='result' >{{status.result|digittoname|safe}}</td>
         <td class='memo'>{{status.memory}}kb</td>
@@ -105,17 +110,17 @@
 </table>
 <ul class="pager">
     {%if statuses.has_previous%}
-    <li><a href="?page={{statuses.previous_page_number}}">上一页</a></li>
+    <li><a href="?cid={{contest.id}}&page={{statuses.previous_page_number}}">上一页</a></li>
     {%else%}
     <li class="disabled"><a href="#">上一页</a></li>
     {%endif%}
     {%if statuses.has_next%}
 
-    <li><a href="?page={{statuses.next_page_number}}">下一页</a></li>
+    <li><a href="?cid={{contest.id}}&page={{statuses.next_page_number}}">下一页</a></li>
     {%else%}
     <li class="disabled"><a href="#">下一页</a></li>
     {%endif%}
-    <li><a href="?page=1">第一页</a></li>
+    <li><a href="?cid={{contest.id}}&page=1">第一页</a></li>
 </ul>
 </div>
 
