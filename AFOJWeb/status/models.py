@@ -10,7 +10,7 @@ class Solution(models.Model):
     time = models.IntegerField(default=0)
     memory = models.IntegerField(default=0)
     in_date = models.DateTimeField(auto_now_add=True)
-    result = models.IntegerField(default=0)
+    result = models.IntegerField(default=1)
     language = models.IntegerField(default=0)
     ip = models.CharField(max_length=15)
     contest = models.ForeignKey(Contest, null=True)

@@ -86,10 +86,10 @@
         <!-- <td></td> -->
         <td>
         {%if user.is_staff%}
-            <a href="/oj/code/{{status.solution_id}}" target="_blank" class='lang'>{{status.language|digittolanguage}}</a>
+            <a href="/status/code?run_id={{status.id}}" target="_blank" class='lang'>{{status.language|digittolanguage}}</a>
         {%else%}
-        {% ifequal user.username status.user_id %}
-                <a href="/oj/code/{{status.solution_id}}" target="_blank" class='lang'>{{status.language|digittolanguage}}</a>
+        {% ifequal user.username status.user.user.username %}
+                <a href="/status/code?run_id={{status.id}}" target="_blank" class='lang'>{{status.language|digittolanguage}}</a>
         {% else %}
                 <a href="#" class='lang'>{{status.language|digittolanguage}}</a>
         {% endifequal %}

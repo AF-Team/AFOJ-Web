@@ -71,7 +71,7 @@
         {% for item in problems.object_list %}
         <tr >
             <td >{{item.problem_id}}</td>
-            <td><a href="">{{item.title}}</a></td>
+            <td><a href="/problemlist/problem/{{item.problem_id}}">{{item.title}}</a></td>
             <td>{{item.difficulty}}</td>
             <td>{{item.solved}}/{{item.submit}}</td>
             <td>{%if item.visible%}

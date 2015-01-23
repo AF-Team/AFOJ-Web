@@ -270,17 +270,12 @@ def handle_fps(fpsxml,request):
 			print "Solution is Ture"
 			s=Solution()
 			code=Source_code()
-			try:
-				run_id=solutiorun_.objects.order_by('-id')[0].solution_id+1
-			except:
-				run_id=1
-			s.solution_id=run_id
 			s.problem_id=pid
 			s.user=UserOJ.objects.get(user__username=username)
 			s.contest_id=None
 			s.code_length=len(sol.text)
 			s.save()
-			code.solution_id=run_id
+			code.solution_id=s.id
 			code.source=sol.text
 			code.save()
 

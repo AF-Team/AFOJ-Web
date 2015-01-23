@@ -108,9 +108,11 @@ def code_show(request):
 	if request.method=="GET":
 		run_id=request.GET.get('run_id',None)
 		cid=request.GET.get('cid',None)
+		run_id=int(run_id)
 		try:
 			sol=Solution.objects.get(id=run_id)
 		except ObjectDoesNotExist:
+			
 			error="没有这条记录"
 			return render_to_response("error.html",RequestContext(request,{"error":error}))
 		try: 
