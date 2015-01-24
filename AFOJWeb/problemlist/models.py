@@ -20,14 +20,15 @@ class Problem(models.Model):
 	submit=models.IntegerField(default=0,max_length=1)
 	solved=models.IntegerField(default=0,max_length=1)
 	difficulty=models.IntegerField(default=2)
+	# score=models.OneToOneField(Score)
 	def  __unicode__(self):
 		return u"%s -%s" % (self.title,self.title)
 		# return must unicode rather than int 
 
 class Score(models.Model):
-	problem=models.ForeignKey(Problem)
+	problem=models.OneToOneField(Problem)
 	file_name=models.CharField(max_length=20)
-	score=models.IntegerField(default=0)
+	score=models.IntegerField(default=200)
 
 class Problem_Image(models.Model):
     problem = models.ForeignKey(Problem)

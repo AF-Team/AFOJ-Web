@@ -37,6 +37,10 @@ urlpatterns+=patterns((''),
 	)
 
 urlpatterns+=patterns((''),
+	(r'^ranklist/',include('ranklist.urls')),
+	)
+
+urlpatterns+=patterns((''),
 	(r'^wiki/',include('wiki.urls')),
 	)
 
