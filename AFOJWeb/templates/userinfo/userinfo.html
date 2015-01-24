@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {%block css%}
-<link rel="stylesheet" href="{{ STATIC_URL }}css/dashboard.css">
+<link rel="stylesheet" href="{{ STATIC_URL }}css/font-awesome.css" />
+<style>
+  .item{
+    border-left: 1px solid #ddd ;
+    border-right: 1px solid #ddd;
+    margin: 0px;
+    /*border-color:black;*/
+  }
+</style>
 {%endblock%}
 {%block title%}
 空军航空大学在线判题系统-题目
@@ -16,16 +24,79 @@
         
       </div>
     </div>
+
 <div class="container">
-  {%for ac in ac_problem_list%}
-  {{ac.0}}
-  {%endfor%}
-  <hr>
-  {%for unsolved in unsolved_list%}
-  {{unsolved.0}}
-  {%endfor%}
-  
+  <div class="row">
+    <div class="col-md-3">
+      <img src="/static/img/tx.gif" alt="">
+      <h1>{{userinfo.user.username}}</h1>
+      <p>{{userinfo.realName}}</p>
+        <hr>
+        <ul class="list-group">
+          <li class="list-group-item"><span class="glyphicon glyphicon-globe"></span> 学校:空军航空大学  </li>
+          <li class="list-group-item">
+            <span class="glyphicon glyphicon-send "></span> 队别:{{userinfo.team}}队
+          </li>
+          <li class="list-group-item"> 
+            <span class="glyphicon glyphicon-stats"></span> 解题/提交:<span class="text-success">{{userinfo.solved}}</span>/<span class="text-danger">{{userinfo.submit}}</span>
+          </li>
+          <li class="list-group-item"><span class="glyphicon glyphicon-usd"></span> 积分:{{userinfo.scoreOne}}</li>
+          <li class="list-group-item">
+            <span class="glyphicon glyphicon-time"></span> {{userinfo.user.date_joined  | date:"o-n-j G:i:s"}} 注册
+          </li>
+      
+
+
+        </ul>
+    </div>
+    <div class="col-md-9">
+      <ul class="nav nav-tabs" role="tablist" id="myTab">
+      <li role="presentation" class="active"><a href="#problem" role="tab" data=toggle="tab">题目</a></li>
+      <li role="presentation"  role="tab" data=toggle="tab"><a href="#blog">
+    博客</a></li>
+
+    </ul>
+<div class="tab-content">
+  <div  role="tabpanel" class="tab-pane fade in active" id="problem" aria-labeledBy="home-tab">
+    <br>
+    <div class="panel panel-default">
+      <div class="panel-heading">题目</div>
+      <div class="panel-body">
+           {%for ac in ac_problem_list%}
+          <a href="/problemlist/problem/{{ac.0}}">{{ac.0}}</a>
+          {%endfor%}
+          <hr>
+          {%for unsolved in unsolved_list%}
+          <a href="/problemlist/problem/{{unsolved.0}}">{{unsolved.0}}</a>
+          
+          {%endfor%}
+      </div>
+ <div class="panel-footer"><div class="row">
+     <div class="col-md-4 "><p class="text-center">总解题数</p><h1 class="text-center">{{userinfo.solved}}</h1></div>
+     <div class="col-md-4 item"><p class="text-center">得分</p><h1 class="text-center">{{userinfo.scoreOne}}</h1></div>
+     <div class="col-md-4 "><p class="text-center">未解题目</p><h1 class="text-center">{{unsolved_list_count}}</h1></div>
+   </div></div>
+    </div> 
+   
+ </div>
+ <div  role="tabpanel" class="tab-pane fade " id="blog" aria-labeledBy="home-tab">
+   blog
+ </div>
+</div>
+    </div> <!-- col-md-9 -->
+  </div>
 </div>
 
 
+<div class="container">
+
+  
+</div>
+
+<script>
+$('#myTab a').click(function (e) {
+  e.preventDefault()
+  $(this).tab('show')
+})
+</script>
 {% endblock %}

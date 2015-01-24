@@ -30,7 +30,7 @@ def userinfo(request,username):
 		status_list=Solution.objects.filter(user__user__username=username)
 		ac_problem_list=status_list.filter(result=5).order_by('problem_id').values_list('problem_id')
 		unsolved_list=status_list.exclude(result=5).order_by('problem_id').values_list('problem_id')
-		temp_unsolved_list=[]
+		unsolved_list_count=unsolved_list.count()
 		unsolved_list=list(set(unsolved_list)-set(ac_problem_list))
 		unsolved_list.sort(key=lambda pid:pid[0])
 
@@ -41,4 +41,4 @@ def userinfo(request,username):
 		# 			temp_unsolved_list.append(unsolved[0])
 		print ac_problem_list
 		print unsolved_list
-		return render_to_response("userinfo/userinfo.html",RequestContext(request,{'ac_problem_list':ac_problem_list,'unsolved_list':unsolved_list}))
+		return render_to_response("userinfo/userinfo.html",RequestContext(request,{'ac_problem_list':ac_problem_list,'unsolved_list':unsolved_list,'userinfo':u,'unsolved_list_count':unsolved_list_count}))

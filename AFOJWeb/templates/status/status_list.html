@@ -78,8 +78,8 @@
     {%for status in statuses%}
     <tr align="left">
         <td class="sid" >{{status.id}}</td>
-        <td><a href="">{{status.problem_id}}</a></td>
-        <td><a href="">{{status.user}}</a></td>
+        <td><a href="/problemlist/problem/{{status.problem_id}}">{{status.problem_id}}</a></td>
+        <td><a href="/userinfo/{{status.user}}">{{status.user}}</a></td>
         <td  class='result' >{{status.result|digittoname|safe}}</td>
         <td class='memo'>{{status.memory}}kb</td>
         <td class='time'>{{status.time}}ms</td>
