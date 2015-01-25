@@ -34,18 +34,12 @@
           </div>
         </div>
         <div class="col-md-9">
-          <a href ="/dashboard/addproblem" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span>添加题目</a>
+          <a href ="/dashboard/addnews" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span>添加新闻</a>
 <hr>
 <form action="" method="POST">
-<input type="text" placeholder="题目"  name="title"class="form-control" value="{{problem.title}}">
-<textarea id="description" name="description" placeholder="题目描述">{{problem.description}}</textarea>
-<textarea id="input"  name="input" placeholder="输入"
->{{problem.pro_input}}</textarea>
-<textarea id="output" name="output" placeholder="输出" >{{problem.pro_output}}</textarea>
-<textarea id="sample_input"  name="sample_input" placeholder="样例输入" value=>{{problem.sample_input}}</textarea>
-<textarea id="sample_output" name="sample_output" placeholder="样例输出" value="">{{problem.sample_output}}</textarea>
-<textarea id="hint" name="hint" placeholder="提示" >{{problem.hint}}</textarea>
-<input type="text" name="source" placeholder="来源" class="form-control" value="{{problem.source}}">
+<input type="text" placeholder="题目"  name="title"class="form-control" value="{{news.title}}">
+<textarea id="description" name="description" placeholder="题目描述">{{news.content}}</textarea>
+
 <button type="submit"  class="btn btn-success">提交</button>
 </form>
 
@@ -56,11 +50,7 @@
 
 <script type="text/javascript">
 $("#description").qeditor({});
-$("#input").qeditor({});
-$("#output").qeditor({});
-$("#sample_input").qeditor({});
-$("#sample_output").qeditor({});
-$("#hint").qeditor({});
+
 </script>
 
 

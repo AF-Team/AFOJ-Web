@@ -15,6 +15,7 @@ from account.models import *
 from problemlist.models import *
 from contest.models import *
 from status.models import *
+from oj.models import *
 from AFOJWeb import config
 # Create your views here.
 def index(request):
@@ -54,9 +55,20 @@ def dashboard_problem(request):
 
 
 def dashboard_add_problem(request):
-	if request.method=="GET":	
+	if request.method=="GET":
+		pid=request.GET.get('pid',None)
+		if pid!=None:
+			try:
+				pro=Problem.objects.get(problem_id=pid)
+			except ObjectDoesNotExist:
+				error=u"题目不存在"
+				return render_to_response("error.html",RequestContext(request,{'error':error}))
+
+			return render_to_response("dashboard/dashboard_add_problem.html",RequestContext(request,{'problem':pro}))
 		return render_to_response("dashboard/dashboard_add_problem.html",RequestContext(request,))
+
 	if request.method=="POST":
+		pid=request.GET.get('pid',None)
 		title=request.POST.get('title',None)
 		description=request.POST.get('description',None)
 		input=request.POST.get('input',None)
@@ -65,15 +77,24 @@ def dashboard_add_problem(request):
 		sample_output=request.POST.get('sample_output',None)
 		source=request.POST.get('source',None)
 		hint=request.POST.get('hint',None)
+		print pid
 		if title==None:
 			error="这提交的东西也太少了吧"
 			return render_to_response("error.html",RequestContext(request,{"error":error}))
-		pro=Problem()
-		try:
-			temp=Problem.objects.order_by('-problem_id')[0].problem_id+1
-		except:
-			temp=1000
-		pro.problem_id=temp
+		if pid!=None:
+			try:
+				pro=Problem.objects.get(problem_id=pid)
+			except ObjectDoesNotExist:
+				error=u"题目不存在"
+				return render_to_response("error.html",RequestContext(request,{'error':error}))
+				
+		if pid==None:
+			pro=Problem()
+			try:
+				temp=Problem.objects.order_by('-problem_id')[0].problem_id+1
+			except:
+				temp=1000
+			pro.problem_id=temp
 		pro.title=title
 		pro.description=description
 		pro.pro_input=input
@@ -84,8 +105,9 @@ def dashboard_add_problem(request):
 		pro.source=source
 		pro.time_limit=1000
 		pro.memory_limit=65536
+		print pro.hint
 		pro.save()
-		return HttpResponseRedirect("/problemlist")
+		return HttpResponseRedirect("/problemlist/problem/"+str(pro.problem_id))
 
 
 def dashboard_contest(request):
@@ -123,8 +145,18 @@ def dashboard_contest(request):
 
 def dashboard_add_contest(request):
 	if request.method=="GET":
+		cid=request.GET.get('cid',None)
+		if cid!=None:
+			try:
+				con=Contest.objects.get(id=cid)
+				problem_list=Contest_problem.objects.select_related().filter(contest__id=cid).order_by('num')
+			except ObjectDoesNotExist:
+				error="比赛不存在"
+				return render_to_response("error.html",RequestContext(request,{'error':error}))
+			return render_to_response("dashboard/dashboard_add_contest.html",RequestContext(request,{'contest':con,'problem_list':problem_list}))
 		return render_to_response("dashboard/dashboard_add_contest.html",RequestContext(request,))
 	if request.method=="POST":
+		cid=request.GET.get('cid',None)
 		title=request.POST.get('title',None)
 		description=request.POST.get('description',None)
 		problems=request.POST.get('problems',None)
@@ -136,37 +168,79 @@ def dashboard_add_contest(request):
 		if title==None:
 			error="这提交的东西也太少了吧"
 			return render_to_response("error.html",RequestContext(request,{"error":error}))
-		con=Contest()
-		con.title=title
-		con.start_time=start_time
-		con.end_time=end_time
-		con.description=description
-		try:
-			contest_user_add=UserOJ.objects.get(user__username=username)
-			con.user=contest_user_add
-			# print contest_user_add
-		except ObjectDoesNotExist:
-			error="账户信息有问题"
-			return render_to_response("error.html",RequestContext(request,{"error":error}))
-		
-		con_pro=Contest_problem()
-		problems=problems.split(',')
-		con.save()
-		i=0
-		for item in problems:
+		if cid!=None:
 			try:
-				pro=Problem.objects.get(problem_id=item)
+				con=Contest.objects.get(id=cid)
+
+
 			except ObjectDoesNotExist:
-				error="这个题目不存在"
-				return render_to_response("error.html",RequestContext(request,{"error":error}))	
+				error="比赛不存在"
+				return render_to_response("error.html",RequestContext(request,{'error':error}))
+			con_prolems=Contest_problem.objects.filter(contest=cid)
+			for item in con_prolems:
+				item.delete()
+			con.title=title
+			con.start_time=start_time
+			con.end_time=end_time
+			con.description=description
+			try:
+				contest_user_add=UserOJ.objects.get(user__username=username)
+				con.user=contest_user_add
+			# print contest_user_add
+			except ObjectDoesNotExist:
+				error="账户信息有问题"
+				return render_to_response("error.html",RequestContext(request,{"error":error}))
+			
 			con_pro=Contest_problem()
-			con_pro.problem=pro
-			con_pro.contest=con
-			con_pro.num=i
-			i=i+1
-			print i
-			con_pro.save()
-		return HttpResponseRedirect('/dashboard/contest')
+			problems=problems.split(',')
+			con.save()
+			i=0
+			for item in problems:
+				try:
+					pro=Problem.objects.get(problem_id=item)
+				except ObjectDoesNotExist:
+					error="这个题目不存在"
+					return render_to_response("error.html",RequestContext(request,{"error":error}))	
+				con_pro=Contest_problem()
+				con_pro.problem=pro
+				con_pro.contest=con
+				con_pro.num=i
+				i=i+1
+				# print i
+				con_pro.save()
+			return HttpResponseRedirect('/contest/contest?cid='+str(con.id))
+		if cid==None:
+			con=Contest()
+			con.title=title
+			con.start_time=start_time
+			con.end_time=end_time
+			con.description=description
+			try:
+				contest_user_add=UserOJ.objects.get(user__username=username)
+				con.user=contest_user_add
+				# print contest_user_add
+			except ObjectDoesNotExist:
+				error="账户信息有问题"
+				return render_to_response("error.html",RequestContext(request,{"error":error}))
+			
+			con_pro=Contest_problem()
+			problems=problems.split(',')
+			con.save()
+			i=0
+			for item in problems:
+				try:
+					pro=Problem.objects.get(problem_id=item)
+				except ObjectDoesNotExist:
+					error="这个题目不存在"
+					return render_to_response("error.html",RequestContext(request,{"error":error}))	
+				con_pro=Contest_problem()
+				con_pro.problem=pro
+				con_pro.contest=con
+				con_pro.num=i
+				i=i+1
+				# print i
+				con_pro.save()
+			return HttpResponseRedirect('/contest/contest?cid='+str(con.id))
 		# con.user=request.user.username
 		# print con.user
 		# print title,description,problems,start_time,end_time,private
@@ -279,3 +353,46 @@ def handle_fps(fpsxml,request):
 			code.source=sol.text
 			code.save()
 
+def dashboard_add_news(request):
+	username=request.user.username
+	if request.method=='GET':
+		nid=request.GET.get('nid',None)
+		if nid!=None:
+			try:
+				ne=News.objects.get(id=nid)
+			except ObjectDoesNotExist:
+				error="这个新闻不存在"
+				return render_to_response("error.html",RequestContext(request,{"error":error}))
+			return render_to_response("dashboard/dashboard_add_news.html",RequestContext(request,{'news':ne}))
+		return render_to_response("dashboard/dashboard_add_news.html",RequestContext(request,))
+	if request.method=='POST':
+		nid=request.GET.get('nid',None)
+		title=request.POST.get('title',None)
+		description=request.POST.get('description',None)
+		if nid!=None:
+			try:
+				new=News.objects.get(id=nid)
+			except ObjectDoesNotExist:
+				error="这个新闻不存在"
+				return render_to_response("error.html",RequestContext(request,{"error":error}))
+		if nid==None:		
+			new=News()
+		new.title=title
+		new.content=description
+		new.user=UserOJ.objects.get(user__username=username)
+		new.save()
+		return HttpResponseRedirect('/dashboard/news')
+		# return render_to_response("dashboard/dashboard_add_news.html",RequestContext(request,))
+def dashboard_news(request):
+	if request.method=='GET':
+		newitems=News.objects.all().order_by('-time')
+		news_pages=Paginator(newitems,20)
+		contests=[]
+		page=request.GET.get('page')
+		try:
+			news=news_pages.page(page)
+		except PageNotAnInteger:
+			news=news_pages.page(1)
+		except EmptyPage:
+			news=news_pages.page(news_pages.num_pages)
+		return  render_to_response("dashboard/dashboard_news.html",RequestContext(request,{'news':news}))

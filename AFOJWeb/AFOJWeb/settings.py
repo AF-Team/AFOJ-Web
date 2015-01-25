@@ -31,13 +31,13 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
     'status',
+    'oj',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
     'account',
     'problemlist',
     'contest',

@@ -6,4 +6,7 @@ urlpatterns=patterns('dashboard.views',
 	url(r'^contest$','dashboard_contest'),
 	url(r'^addcontest$','dashboard_add_contest'),
 	url(r'^fps$','fps_upload'),
+	url(r'^addnews$','dashboard_add_news'),
+	url(r'^news','dashboard_news')
+
 	)

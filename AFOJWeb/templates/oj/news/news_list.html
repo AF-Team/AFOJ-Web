@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{%block css%}
+<link rel="stylesheet" href="{{ STATIC_URL }}css/dashboard.css">
+{%endblock%}
+{%block title%}
+空军航空大学在线判题系统-题目
+{%endblock%}
+{% block body %}
+<div class="bs-docs-header" id="content">
+      <div class="container">
+       <h1>新闻</h1>
+
+
+    <p>你可以在这里看到关于OJ的各个消息
+                </p>
+        
+      </div>
+    </div>
+<div class="container">
+{%for item in newses%}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{item}}</h3>
+  </div>
+  <div class="panel-body">
+<p>{{item.content}}</p>
+  </div>
+
+
+  <div class="panel-footer">
+    <div class="row">
+      <div class="col-md-8"></div>
+      <div class="col-md-2"><p>  发布者:{{item.user}}</p></div>
+      <div class="col-md-2"><p class="text-right"> 发布时间:{{item.time |date:"o-n-j G:i"}}</p></div>
+    </div>
+    
+    
+  </div>
+</div>
+
+<hr>
+
+{%endfor%}
+</div>
+
+
+
+    <hr>
+<ul class="pager">
+    {%if newses.has_previous%}
+    <li><a href="?page={{newses.previous_page_number}}">上一页</a></li>
+    {%else%}
+    <li class="disabled"><a href="#">上一页</a></li>
+    {%endif%}
+    {%if newses.has_next%}
+
+    <li><a href="?page={{newses.next_page_number}}">下一页</a></li>
+    {%else%}
+    <li class="disabled"><a href="#">下一页</a></li>
+    {%endif%}
+    <li><a href="?page=1">第一页</a></li>
+</ul>
+
+
+
+{% endblock %}

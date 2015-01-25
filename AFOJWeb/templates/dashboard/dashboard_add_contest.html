@@ -40,14 +40,15 @@
           <a href ="/dashboard/addproblem" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span>添加比赛</a>
 <hr>
 <form action="" method="POST">
-<input type="text" placeholder="比赛名称"  name="title"class="form-control">
+<input type="text" placeholder="比赛名称"  name="title"class="form-control" value="{{contest.title}}">
 <br>
-<textarea class="form-control" name="description" placeholder="比赛描述" rows="3"></textarea>
+<textarea class="form-control" name="description" placeholder="比赛描述" rows="3">{{contest.description}}</textarea>
 <br>
-<input name="problems" id="problems" placeholder="题目编号(回车输入下一个)" value="" />
+<input name="problems" id="problems" placeholder="题目编号(回车输入下一个)" value="
+{%for item in problem_list%}{{item.problem.problem_id}},{%endfor%}" />
 <br>
-<input class="datetimepicker" type="text" placeholder="开始时间" name="start_time">
-<input class="datetimepicker" type="text" placeholder="结束时间" name="end_time">
+<input class="datetimepicker" type="text" placeholder="开始时间" name="start_time" value="{{contest.start_time| date:"o-n-j G:i:s"}}">
+<input class="datetimepicker" type="text" placeholder="结束时间" name="end_time" value="{{contest.end_time| date:"o-n-j G:i:s"}}">
 <br><br>
 <div class="btn-group" data-toggle="buttons">
   

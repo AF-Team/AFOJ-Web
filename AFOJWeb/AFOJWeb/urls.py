@@ -51,4 +51,6 @@ urlpatterns+=patterns((''),
 urlpatterns+=patterns((''),
 	(r'^dashboard/',include('dashboard.urls')),
 	)
-
+urlpatterns+=patterns((''),
+	(r'^oj/',include('oj.urls')),
+	)

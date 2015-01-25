@@ -28,29 +28,29 @@
         <div class="col-md-3">
           <div class="bs-docs-sidebar hidden-print hidden-xs hidden-sm" role="complementary">
           <ul class="nav">
-         {%include 'dashboard/sidebar.html'%}
+           {%include 'dashboard/sidebar.html'%}
           </ul>
           </div>
         </div>
         <div class="col-md-9">
-           <a href ="/dashboard/addcontest" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span>添加比赛</a>
+           <a href ="/dashboard/addnews" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span>添加新闻</a>
 <hr>  
   <nav>
       <ul class="pagination">
-          {%if contests.has_previous%}
-          <li><a href="?page={{contests.previous_page_number}}">&laquo;</a></li>
+          {%if news.has_previous%}
+          <li><a href="?page={{news.previous_page_number}}">&laquo;</a></li>
           {%else%}
           <li class="disabled"><a href="#">&laquo;</a></li>
           {%endif%}
-          {%for item in contests.paginator.page_range%}
-              {%ifequal contests.number item%}
+          {%for item in news.paginator.page_range%}
+              {%ifequal news.number item%}
               <li class="active"><a href="?page={{item}}">{{item}}</a></li>
               {%else%}
               <li><a href="?page={{item}}">{{item}}</a></li>
               {%endifequal%}
           {%endfor%}
-          {%if contests.has_next%}
-          <li><a href="?page={{contests.next_page_number}}">&raquo;</a></li>
+          {%if news.has_next%}
+          <li><a href="?page={{news.next_page_number}}">&raquo;</a></li>
           {%else%}
           <li class="disabled"><a href="#">&raquo;</a></li>
           {%endif%}
@@ -60,35 +60,26 @@
     <thead>
         <tr> 
             <th>#</th>
-            <th>比赛名称</th>
-            <th>创建者</th>
-            <th>开始时间</th>
-            <th>结束时间</th>
-            <th>可见性</th>
+            <th>题目</th>
+            <th>作者</th>
             <th>编辑</th>
+            <th>添加时间</th>
         </tr>
     </thead>
     <tbody>
-        {% for item in contests.object_list %}
+        {% for item in news %}
         <tr >
             <td >{{item.id}}</td>
-            <td><a href="">{{item.title}}</a></td>
-            <td>{{item.user}}</td>
-            <td>{{item.start_time| date:"o-n-j G:i:s"}}</td>
-            <td>{{item.end_time| date:"o-n-j G:i:s"}}</td>
-            <td>{%if item.visible%}
-              <a href="/dashboard/contest?cid={{item.id}}"  class="green">可见</a>
-              {%else%}
-              <a href="/dashboard/contest?cid={{item.id}}" class="red">不可见</a>
-              {%endif%}
-              
-            </td>
-            <td><a href="/dashboard/addcontest?cid={{item.id}}">编辑</a></td>
+            <td><a href="news/{{item.id}}">{{item.title}}</a></td>
+            <td><a href="">{{item.user}}</a></td>
+            <td><a href="/dashboard/addnews?nid={{item.id}}">编辑</a></td>
+            <td>{{item.time| date:"o-n-j G:i:s"}}</td>
         </tr>
         {% endfor %}
         
     </tbody>
 </table>
+
         </div>
       </div>
     </div>
