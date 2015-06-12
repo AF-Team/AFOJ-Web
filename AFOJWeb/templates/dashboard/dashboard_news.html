@@ -63,6 +63,7 @@
             <th>题目</th>
             <th>作者</th>
             <th>编辑</th>
+            <th>Del</th>
             <th>添加时间</th>
         </tr>
     </thead>
@@ -73,6 +74,7 @@
             <td><a href="news/{{item.id}}">{{item.title}}</a></td>
             <td><a href="">{{item.user}}</a></td>
             <td><a href="/dashboard/addnews?nid={{item.id}}">编辑</a></td>
+            <td><a href="/dashboard/addnews?nid_del={{item.id}}">Del</a></td>
             <td>{{item.time| date:"o-n-j G:i:s"}}</td>
         </tr>
         {% endfor %}

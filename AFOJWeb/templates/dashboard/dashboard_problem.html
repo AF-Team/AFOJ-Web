@@ -65,6 +65,7 @@
             <th>比例</th>
             <th>可见性</th>
             <th>编辑</th>
+            <th>删除</th>
         </tr>
     </thead>
     <tbody>
@@ -79,9 +80,9 @@
               {%else%}
               <a href="/dashboard/problem?pid={{item.problem_id}}" class="red">不可见</a>
               {%endif%}
-              
             </td>
             <td><a href="/dashboard/addproblem?pid={{item.problem_id}}">编辑</a></td>
+            <td><a href="/dashboard/addproblem?pid_del={{item.problem_id}}">删除</a></td>
         </tr>
         {% endfor %}
         

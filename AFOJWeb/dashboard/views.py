@@ -19,7 +19,17 @@ from oj.models import *
 from AFOJWeb import config
 # Create your views here.
 def index(request):
-	return render_to_response("dashboard/dashboard.html",RequestContext(request,))
+	if request.method=='GET':
+		username=request.user.username
+		try:
+			user_authority=Privilege.objects.get(user__user__username=username).authority
+			if user_authority==config.ADMIN:
+				return render_to_response("dashboard/dashboard.html",RequestContext(request,))
+			else:
+				return render_to_response("dashboard/dashboard _error.html",RequestContext(request,))
+		except ObjectDoesNotExist:
+			return render_to_response("dashboard/dashboard _error.html",RequestContext(request,))
+	return render_to_response("dashboard/dashboard _error.html",RequestContext(request,))
 def dashboard_problem(request):
 	if request.method=='GET':
 		username=request.user.username
@@ -57,6 +67,7 @@ def dashboard_problem(request):
 def dashboard_add_problem(request):
 	if request.method=="GET":
 		pid=request.GET.get('pid',None)
+		pid_del=request.GET.get('pid_del',None)
 		if pid!=None:
 			try:
 				pro=Problem.objects.get(problem_id=pid)
@@ -65,6 +76,14 @@ def dashboard_add_problem(request):
 				return render_to_response("error.html",RequestContext(request,{'error':error}))
 
 			return render_to_response("dashboard/dashboard_add_problem.html",RequestContext(request,{'problem':pro}))
+		if pid_del!=None:
+			try:
+				pro=Problem.objects.get(problem_id=pid_del)
+			except ObjectDoesNotExist:
+				error=u"题目不存在"
+				return render_to_response("error.html",RequestContext(request,{'error':error}))
+			pro.delete()
+			return HttpResponseRedirect("/dashboard/problem")
 		return render_to_response("dashboard/dashboard_add_problem.html",RequestContext(request,))
 
 	if request.method=="POST":
@@ -357,6 +376,8 @@ def dashboard_add_news(request):
 	username=request.user.username
 	if request.method=='GET':
 		nid=request.GET.get('nid',None)
+		nid_del=request.GET.get('nid_del',None)
+		print nid_del
 		if nid!=None:
 			try:
 				ne=News.objects.get(id=nid)
@@ -364,7 +385,18 @@ def dashboard_add_news(request):
 				error="这个新闻不存在"
 				return render_to_response("error.html",RequestContext(request,{"error":error}))
 			return render_to_response("dashboard/dashboard_add_news.html",RequestContext(request,{'news':ne}))
+		if nid_del!=None:
+			try:
+				ne=News.objects.get(id=nid_del)
+			except ObjectDoesNotExist:
+				error="这个新闻不存在"
+				return render_to_response("error.html",RequestContext(request,{"error":error}))
+			ne.delete()
+			return HttpResponseRedirect('/dashboard/news')
 		return render_to_response("dashboard/dashboard_add_news.html",RequestContext(request,))
+		# return HttpResponseRedirect('/dashboard/news')
+
+
 	if request.method=='POST':
 		nid=request.GET.get('nid',None)
 		title=request.POST.get('title',None)
