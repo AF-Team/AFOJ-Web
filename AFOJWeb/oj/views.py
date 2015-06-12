@@ -10,7 +10,7 @@ def index(request):
 def news_list_show(request):
 	newitems=News.objects.order_by('-time')
 	print newitems
-	news_pages=Paginator(newitems,20)
+	news_pages=Paginator(newitems,10)
 	page=request.GET.get('page')
 	try:
 		items=news_pages.page(page)
