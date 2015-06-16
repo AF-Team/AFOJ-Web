@@ -62,17 +62,19 @@
     <div class="panel panel-default">
       <div class="panel-heading">题目</div>
       <div class="panel-body">
+        <p>已解</p>
            {%for ac in ac_problem_list%}
           <a href="/problemlist/problem/{{ac.0}}">{{ac.0}}</a>
           {%endfor%}
           <hr>
+           <p>未解</p>
           {%for unsolved in unsolved_list%}
           <a href="/problemlist/problem/{{unsolved.0}}">{{unsolved.0}}</a>
           
           {%endfor%}
       </div>
  <div class="panel-footer"><div class="row">
-     <div class="col-md-4 "><p class="text-center">总解题数</p><h1 class="text-center">{{userinfo.solved}}</h1></div>
+     <div class="col-md-4 "><p class="text-center">总解题数</p><h1 class="text-center">{{ac_problem_list_count}}</h1></div>
      <div class="col-md-4 item"><p class="text-center">得分</p><h1 class="text-center">{{userinfo.scoreOne}}</h1></div>
      <div class="col-md-4 "><p class="text-center">未解题目</p><h1 class="text-center">{{unsolved_list_count}}</h1></div>
    </div></div>

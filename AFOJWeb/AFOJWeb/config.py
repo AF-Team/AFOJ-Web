@@ -5,6 +5,7 @@ ADD_CONTEST = 4
 ADD_ANNOUNCE = 8
 ADMIN = ACCESS_BACKEND + ADD_PROBLEM + ADD_CONTEST + ADD_ANNOUNCE
 VERDICT_NAME=(
+	# (-1,'V_NOT','什么鬼'),
 	(0,'V_ALL','各种状态'),
 	(1,'V_Q','<span class="glyphicon glyphicon-refresh"></span> 队列中'),
 	(2,'V_C','<span class="glyphicon glyphicon-refresh"></span> 编译'),

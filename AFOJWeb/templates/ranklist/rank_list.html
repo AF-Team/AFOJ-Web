@@ -54,7 +54,7 @@
         {% for item in user_list %}
         <tr >
             <td >{{forloop.counter}}</td>
-            <td><a href="">{{item.user.username}}</a></td>
+            <td><a href="/userinfo/{{item.user.username}}">{{item.user.username}}</a></td>
             <td>{{item.scoreOne}}</td>
             <td>{{item.solved}}</td>
             <td>{{item.submit}}</td>

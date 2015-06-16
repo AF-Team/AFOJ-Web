@@ -95,11 +95,7 @@ def contest_problem_list(request):
 					# print 'authority'
 					if user_authority==config.ADMIN:
 						return render_to_response("contest/contest_detail.html",RequestContext(request,{'contest':contest,'problems':problem_list,'now':now,'contest_rank_info':contest_rank_info}))
-					else:
-						error="你没有权限查看这次比赛"
-               					return render_to_response("error.html",RequestContext(request,{'error':error}))
 
-				except ObjectDoesNotExist:
 					if contest.user.user.username==username:
 						return render_to_response("contest/contest_detail.html",RequestContext(request,{'contest':contest,'problems':problem_list,'now':now,'contest_rank_info':contest_rank_info}))
 
@@ -124,6 +120,35 @@ def contest_problem_list(request):
 			               				return render_to_response("error.html",RequestContext(request,{'error':error}))
 			               			if contest.visible==True:
 								return render_to_response("contest/contest_detail.html",RequestContext(request,{'contest':contest,'problems':problem_list,'now':now,'contest_rank_info':contest_rank_info}))
+
+
+				except ObjectDoesNotExist:
+					error="你没有权限查看这次比赛"
+					return render_to_response("error.html",RequestContext(request,{'error':error}))
+					# if contest.user.user.username==username:
+					# 	return render_to_response("contest/contest_detail.html",RequestContext(request,{'contest':contest,'problems':problem_list,'now':now,'contest_rank_info':contest_rank_info}))
+
+					# if contest.user.user.username!=username:
+					# 	if contest.private==1:
+					# 		if contest.visible==False:
+					# 			error="你没有权限查看这次比赛"
+			  #              				return render_to_response("error.html",RequestContext(request,{'error':error}))
+			  #              			if contest.visible==True:
+			  #              				try:
+			  #              					ContestPrivilege.objects.get(user__user__username=username,contest_id=cid)
+					# 				return render_to_response("contest/contest_detail.html",RequestContext(request,{'contest':contest,'problems':problem_list,'now':now,'contest_rank_info':contest_rank_info}))
+
+					# 			except ObjectDoesNotExist:
+					# 				error="你没有被邀请这次比赛"
+			  #              					return render_to_response("error.html",RequestContext(request,{'error':error}))
+ 				# 		if contest.private!=1:
+ 				# 			# print 'test'
+ 				# 			if contest.visible==False:
+ 				# 				print 'fads'
+ 				# 				error="你没有权限查看这次比赛"
+			  #              				return render_to_response("error.html",RequestContext(request,{'error':error}))
+			  #              			if contest.visible==True:
+					# 			return render_to_response("contest/contest_detail.html",RequestContext(request,{'contest':contest,'problems':problem_list,'now':now,'contest_rank_info':contest_rank_info}))
 
 
 			except ObjectDoesNotExist:

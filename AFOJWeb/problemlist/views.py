@@ -59,9 +59,21 @@ def problem_show(request,pid):
 		try:
 			authority=Privilege.objects.get(user_id=request.user.id).authority
 
+
 		except ObjectDoesNotExist:
 			authority=None
-			if cid==None:
+			# if cid==None:
+			# 	try:
+			# 		problem=Problem.objects.get(problem_id=pid)
+			# 	except ObjectDoesNotExist:
+			# 		error="这个题目不存在哦"
+			# 		return render_to_response("error.html",RequestContext(request,{"error":error}))
+			# 	if authority==config.ADMIN or problem.visible is True:
+			# 		return render_to_response("problemlist/problem.html",RequestContext(request,{"problem":problem})) 	
+			# 	else:
+			# 		error="这个题目不存在哦"
+			# 		return render_to_response("error.html",RequestContext(request,{"error":error}))
+		if cid==None:
 				try:
 					problem=Problem.objects.get(problem_id=pid)
 				except ObjectDoesNotExist:

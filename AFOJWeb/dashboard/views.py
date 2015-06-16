@@ -71,11 +71,12 @@ def dashboard_add_problem(request):
 		if pid!=None:
 			try:
 				pro=Problem.objects.get(problem_id=pid)
+				sco=Score.objects.get(problem_id=pid)
 			except ObjectDoesNotExist:
 				error=u"题目不存在"
 				return render_to_response("error.html",RequestContext(request,{'error':error}))
 
-			return render_to_response("dashboard/dashboard_add_problem.html",RequestContext(request,{'problem':pro}))
+			return render_to_response("dashboard/dashboard_add_problem.html",RequestContext(request,{'problem':pro,'score':sco}))
 		if pid_del!=None:
 			try:
 				pro=Problem.objects.get(problem_id=pid_del)
@@ -96,24 +97,30 @@ def dashboard_add_problem(request):
 		sample_output=request.POST.get('sample_output',None)
 		source=request.POST.get('source',None)
 		hint=request.POST.get('hint',None)
-		print pid
+		score_=request.POST.get('score',None)
+		# print pid
 		if title==None:
 			error="这提交的东西也太少了吧"
 			return render_to_response("error.html",RequestContext(request,{"error":error}))
 		if pid!=None:
 			try:
 				pro=Problem.objects.get(problem_id=pid)
+				sco=Score.objects.get(problem_id=pid)
 			except ObjectDoesNotExist:
 				error=u"题目不存在"
 				return render_to_response("error.html",RequestContext(request,{'error':error}))
 				
 		if pid==None:
 			pro=Problem()
+			sco=Socre()
 			try:
 				temp=Problem.objects.order_by('-problem_id')[0].problem_id+1
+				# temp_socre=Socre.objects.order_by('-id')[0].id+1
 			except:
 				temp=1000
+				# temp_socre=1
 			pro.problem_id=temp
+			sco.problem_id=pro.problem_id
 		pro.title=title
 		pro.description=description
 		pro.pro_input=input
@@ -124,8 +131,15 @@ def dashboard_add_problem(request):
 		pro.source=source
 		pro.time_limit=1000
 		pro.memory_limit=65536
-		print pro.hint
+		# print pro.hint
 		pro.save()
+
+		# sco.id=temp_socre
+		
+		sco.file_name=1
+		sco.score=score_
+		print sco.score
+		sco.save()
 		return HttpResponseRedirect("/problemlist/problem/"+str(pro.problem_id))
 
 
@@ -306,10 +320,17 @@ def handle_fps(fpsxml,request):
 
 		
 		pro=Problem()
+		sco=Socre()
+
 		try:
 			pid=Problem.objects.order_by('-problem_id')[0].problem_id+1
 		except:
 			pid=1000
+
+		sco.score=5
+		sco.file_name=1
+		sco.problem_id=pid
+		
 		img_id=1
 		for x in item:
 			if x.tag=='img':

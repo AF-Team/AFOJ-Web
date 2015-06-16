@@ -46,6 +46,8 @@
 <textarea id="sample_output" name="sample_output" placeholder="样例输出" value="">{{problem.sample_output}}</textarea>
 <textarea id="hint" name="hint" placeholder="提示" >{{problem.hint}}</textarea>
 <input type="text" name="source" placeholder="来源" class="form-control" value="{{problem.source}}">
+<br>
+<input type="text" name="score" placeholder="分数" class="form-control" value="{%if score%}{{score.score}}{%else%}5{%endif%}">
 <button type="submit"  class="btn btn-success">提交</button>
 </form>
 
